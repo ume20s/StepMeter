@@ -7,6 +7,7 @@
         <Label Text="0" FontSize="120" HorizontalTextAlignment="Center" x:Name="LabelCounter"/>
         <Button Text="Count" Clicked="CountClicked"/>
         <Button Text="Reset" Clicked="ResetClicked"/>
+        <Button x:Name ="TestBtn" Text="Visible" IsVisible="False" />
     </StackLayout>
 
 </ContentPage>

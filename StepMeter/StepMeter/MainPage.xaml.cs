@@ -13,6 +13,7 @@ namespace StepMeter
         int Steps { get; set; }
         void InitSensorService();
         void StopSensorService();
+        bool IsAvailable();
     }
 
     public partial class MainPage : ContentPage
@@ -22,7 +23,12 @@ namespace StepMeter
         public MainPage()
         {
             InitializeComponent();
-            StepCounter.InitSensorService();
+            if (DependencyService.Get<IStepCounter>().IsAvailable())
+            {
+                DependencyService.Get<IStepCounter>().InitSensorService();
+                TestBtn.IsVisible = true;
+                TestBtn.Text = "ToolVisible";
+            }
         }
 
         void CountClicked(object o, EventArgs e)
@@ -35,6 +41,5 @@ namespace StepMeter
             StepCounter.Steps = 0;
             LabelCounter.Text = StepCounter.Steps.ToString();
         }
-
     }
 }

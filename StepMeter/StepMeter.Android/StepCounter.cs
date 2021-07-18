@@ -13,7 +13,7 @@ namespace StepMeter.Droid
 {
     class StepCounter : Java.Lang.Object, IStepCounter, ISensorEventListener
     {
-        private int StepsCounter = 1;
+        private int StepsCounter = 0;
         private SensorManager sManager;
 
         public int Steps
@@ -32,31 +32,27 @@ namespace StepMeter.Droid
         {
             sManager = Android.App.Application.Context.GetSystemService(Context.SensorService) as SensorManager;
             sManager.RegisterListener(this, sManager.GetDefaultSensor(SensorType.StepDetector), SensorDelay.Normal);
+            sManager.RegisterListener(this, sManager.GetDefaultSensor(SensorType.StepCounter), SensorDelay.Normal);
         }
 
         public void OnAccuracyChanged(Sensor sensor, [GeneratedEnum] SensorStatus accuracy)
         {
-            // Console.WriteLine("OnAccuracyChanged called");
+            Console.WriteLine("OnAccuracyChanged called");
         }
 
         public void OnSensorChanged(SensorEvent e)
         {
-            switch (e.Sensor.Type)
-            {
-                case SensorType.StepCounter:
-                    // StepsCounter++;
-                    break;
-                case SensorType.StepDetector:
-                    StepsCounter++;
-                    break;
-                default:
-                    break;
-            }
+            StepsCounter++;
         }
 
         public void StopSensorService()
         {
             sManager.UnregisterListener(this);
+        }
+
+        public bool IsAvailable()
+        {
+            return Android.App.Application.Context.PackageManager.HasSystemFeature(Android.Content.PM.PackageManager.FeatureSensorStepCounter) && Android.App.Application.Context.PackageManager.HasSystemFeature(Android.Content.PM.PackageManager.FeatureSensorStepDetector);
         }
     }
 }
